@@ -46,15 +46,21 @@
         }
         
         /* Custom styles for the images */
-        .image-item {
-            cursor: pointer;
-            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-            transform-origin: center;
+        .single-image-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            min-height: 400px; /* Ensure container has a minimum height */
         }
 
-        .image-item:hover {
-            transform: scale(1.05);
+        .single-image {
+            max-width: 100%;
+            max-height: 70vh; /* Limit height to prevent image from being too large */
+            border-radius: 0.5rem;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s ease-in-out;
+            cursor: pointer;
         }
 
         /* Styles for the modal */
@@ -132,10 +138,26 @@
     <div id="tank"></div>
 
     <!-- Gallery Container -->
-    <div class="max-w-7xl mx-auto relative z-10 p-4 rounded-xl bg-white bg-opacity-70 dark:bg-gray-800 dark:bg-opacity-80 shadow-2xl mt-20 transition-colors duration-300">
-        <h1 class="text-4xl font-extrabold text-gray-800 dark:text-white text-center mb-8">My Art Gallery</h1>
-        <div id="gallery-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            <!-- Images will be dynamically added here by JavaScript -->
+    <div class="max-w-4xl mx-auto relative z-10 p-4 rounded-xl bg-white bg-opacity-70 dark:bg-gray-800 dark:bg-opacity-80 shadow-2xl mt-20 transition-colors duration-300">
+        <h1 class="text-4xl font-extrabold text-gray-800 dark:text-white text-center mb-4">My Art Gallery</h1>
+        <!-- Single Image Display Container -->
+        <div id="single-image-container" class="single-image-container">
+            <img id="single-image" class="single-image" src="" alt="Gallery Image">
+        </div>
+        
+        <!-- Navigation and Counter -->
+        <div class="flex justify-center items-center space-x-4 mt-4">
+            <button id="prev-btn" class="p-2 bg-gray-200 dark:bg-gray-700 rounded-full shadow hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+            </button>
+            <span id="image-counter" class="text-lg font-semibold text-gray-800 dark:text-gray-200"></span>
+            <button id="next-btn" class="p-2 bg-gray-200 dark:bg-gray-700 rounded-full shadow hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </button>
         </div>
     </div>
 
@@ -358,8 +380,7 @@
                 }
             });
 
-            // Gallery generation logic
-            // Add your new image filenames to this array. The code will do the rest!
+            // Gallery logic for single image display
             const images = [
                 '0C0FC1B5-DAE5-4ADA-ABB9-86718A8DB63E.JPG',
                 '0D661B86-E9CF-431A-8A47-1E22FBC7D6D6.JPG',
@@ -372,11 +393,23 @@
                 '46B99BCA-C195-461D-98CC-9B8C3B28A66C.JPG',
                 '54A05201-C062-4A49-B8DE-E197D083C509.jpg'
             ];
+            
+            let currentIndex = 0; // State variable to track the current image index
 
-            const galleryContainer = document.getElementById('gallery-container');
+            const singleImage = document.getElementById('single-image');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const imageCounter = document.getElementById('image-counter');
+
             const modal = document.getElementById('image-modal');
             const modalImage = document.getElementById('modal-image');
             const closeModal = document.querySelector('.close');
+
+            // Function to render the current image and update the counter
+            function renderImage() {
+                singleImage.src = `./images/${images[currentIndex]}`;
+                imageCounter.textContent = `${currentIndex + 1} of ${images.length}`;
+            }
 
             // Function to open the modal
             function openModal(src) {
@@ -389,28 +422,20 @@
                 modal.style.display = 'none';
             }
 
-            // Loop through the image filenames and create the gallery
-            images.forEach(filename => {
-                // Create a container for each image
-                const imageWrapper = document.createElement('div');
-                imageWrapper.classList.add('image-item', 'bg-white', 'p-4', 'rounded-lg', 'shadow-md', 'dark:bg-gray-700');
+            // Event listeners for navigation buttons
+            prevBtn.addEventListener('click', () => {
+                currentIndex = (currentIndex - 1 + images.length) % images.length;
+                renderImage();
+            });
 
-                // Create the image element
-                const img = document.createElement('img');
-                img.src = `./images/${filename}`;
-                img.alt = `Gallery image: ${filename}`;
-                img.classList.add('w-full', 'h-auto', 'rounded-lg');
-                
-                // Add click event listener to open the modal
-                img.addEventListener('click', () => {
-                    openModal(img.src);
-                });
-
-                // Append the image to its wrapper
-                imageWrapper.appendChild(img);
-                
-                // Append the wrapper to the gallery container
-                galleryContainer.appendChild(imageWrapper);
+            nextBtn.addEventListener('click', () => {
+                currentIndex = (currentIndex + 1) % images.length;
+                renderImage();
+            });
+            
+            // Add click event listener to the single image to open the modal
+            singleImage.addEventListener('click', () => {
+                openModal(singleImage.src);
             });
 
             // Close the modal when the close button is clicked
@@ -422,6 +447,9 @@
                     hideModal();
                 }
             });
+
+            // Initial render
+            renderImage();
         };
     </script>
 
