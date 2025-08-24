@@ -141,7 +141,7 @@
         </div>
         <!-- Container for the last updated text and light/dark mode toggle button -->
         <div class="flex items-center space-x-4">
-            <span id="last-updated" class="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300"></span>
+            <span id="last-updated" class="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">Last Updated: August 24, 2025</span>
             <!-- Light/Dark Mode Toggle Button -->
             <button id="theme-toggle" class="p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-300 focus:outline-none">
                 <!-- Sun icon for light mode, Moon icon for dark mode -->
@@ -167,27 +167,27 @@
     <!-- Navigation and Counter (moved to a fixed bottom position) -->
     <div class="fixed-bottom-buttons flex justify-center items-center space-x-4 p-4 rounded-xl bg-gray-200 bg-opacity-70 dark:bg-gray-800 dark:bg-opacity-80 shadow-2xl transition-colors duration-300">
         <!-- Rotation button - Counter-clockwise -->
-        <button id="rotate-ccw-btn" class="p-2 bg-gray-200 dark:bg-gray-700 rounded-full shadow hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+        <button id="rotate-ccw-btn" class="p-2 bg-gray-200 dark:bg-gray-700 rounded-full shadow hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" title="Rotate Counter-Clockwise (ArrowUp)">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700 dark:text-gray-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M20.3 4.7l-1.3 1.3M17 12a5 5 0 1 1-10 0 5 5 0 0 1 10 0zM12 2a10 10 0 0 1 8 5.6M12 22a10 10 0 0 0 8-5.6"/>
                 <path d="M12 22v-4M22 12h-4"/>
             </svg>
         </button>
 
-        <button id="prev-btn" class="p-2 bg-gray-200 dark:bg-gray-700 rounded-full shadow hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+        <button id="prev-btn" class="p-2 bg-gray-200 dark:bg-gray-700 rounded-full shadow hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" title="Previous Image (ArrowLeft)">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
             </svg>
         </button>
         <span id="image-counter" class="text-lg font-semibold text-gray-800 dark:text-gray-200"></span>
-        <button id="next-btn" class="p-2 bg-gray-200 dark:bg-gray-700 rounded-full shadow hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+        <button id="next-btn" class="p-2 bg-gray-200 dark:bg-gray-700 rounded-full shadow hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" title="Next Image (ArrowRight)">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
             </svg>
         </button>
         
         <!-- Rotation button - Clockwise -->
-        <button id="rotate-cw-btn" class="p-2 bg-gray-200 dark:bg-gray-700 rounded-full shadow hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+        <button id="rotate-cw-btn" class="p-2 bg-gray-200 dark:bg-gray-700 rounded-full shadow hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" title="Rotate Clockwise (ArrowDown)">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700 dark:text-gray-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M3.7 4.7l1.3 1.3M7 12a5 5 0 1 0 10 0 5 5 0 0 0-10 0zM12 2a10 10 0 0 0-8 5.6M12 22a10 10 0 0 1-8-5.6"/>
                 <path d="M12 22v-4M2 12h4"/>
@@ -460,6 +460,49 @@
                     'F3FADACA-BC2B-400D-81A7-3661EF9F9468.JPG',
                     'FBE45984-0311-4808-B719-54E9E65D3984.JPG'
                 ];
+
+                // A new array for custom tooltips. The index of each tooltip string
+                // must correspond to the index of the image it describes in the `images` array.
+                const tooltips = [
+                    'Spoooky',
+                    'Men',
+                    'Dude #1',
+                    'Evelynn (GOD DAMNN)',
+                    'Very Fishy',
+                    'Biblically Accurate',
+                    'More Men',
+                    'Mermaid :)',
+                    'Is Sin Bad?',
+                    'Androgenous Person? (Plz be a Woman)',
+                    'Meow :3',
+                    'Rabbit',
+                    'More Rabbit',
+                    'TEMU Hello Kitty',
+                    'Clothing Physics??! OKAY',
+                    'Nice Horns',
+                    'Cute',
+                    'Sproutling :>',
+                    'They a Model :O',
+                    'Also Cute',
+                    'She Sells SeaShells?',
+                    'Prettty',
+                    'I love these two :)))',
+                    'Chilling',
+                    'The River Styx (One of my Favorites)',
+                    'Androgenous Person #2,
+                    'Those Flowers look Amazing :O. 10/10',
+                    'Dude #2 (VERY Detailed)',
+                    'THIS BELONGS IN A MUSEUM :OOO',
+                    'Androgenous Person #3',
+                    'Who won??',
+                    'HOLY MOLY (Another Favorite)',
+                    'What is Bro plotting??',
+                    'FROGGGIES :3 :O :> (One of my Favorites)',
+                    'Anatomically correct??!',
+                    'My soul is being looked at (Also impressive anatomy accuracy)',
+                    'Beautiful Eyes... like always <3 (Defo a Favorite)',
+                    'Impressively Complex Hair'
+                ];
                 
                 let currentIndex = 0; // State variable to track the current image index
                 let rotationAngle = 0; // State variable for image rotation
@@ -470,7 +513,6 @@
                 const imageCounter = document.getElementById('image-counter');
                 const rotateCwBtn = document.getElementById('rotate-cw-btn');
                 const rotateCcwBtn = document.getElementById('rotate-ccw-btn');
-                const lastUpdatedSpan = document.getElementById('last-updated');
     
                 const modal = document.getElementById('image-modal');
                 const modalImage = document.getElementById('modal-image');
@@ -480,6 +522,8 @@
                 function renderImage() {
                     singleImage.src = `./images/${images[currentIndex]}`;
                     imageCounter.textContent = `${currentIndex + 1} of ${images.length}`;
+                    // Update the tooltip using the custom tooltips array
+                    singleImage.title = tooltips[currentIndex];
                     updateImageRotation();
                 }
     
@@ -521,14 +565,6 @@
                 function rotateImageCounterClockwise() {
                     rotationAngle -= 90;
                     updateImageRotation();
-                }
-    
-                // Function to display the last updated date
-                function updateLastUpdated() {
-                    const now = new Date();
-                    const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
-                    const formattedDate = now.toLocaleDateString('en-US', options);
-                    lastUpdatedSpan.textContent = `Last updated: ${formattedDate}`;
                 }
     
                 // Event listeners for navigation buttons
@@ -578,7 +614,6 @@
     
                 // Initial render
                 renderImage();
-                updateLastUpdated();
             }, 100); // Small delay to allow the page to fully render
         };
     </script>
