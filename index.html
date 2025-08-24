@@ -513,13 +513,13 @@
                 
                 // Function to rotate the image clockwise
                 function rotateImageClockwise() {
-                    rotationAngle = (rotationAngle + 90) % 360;
+                    rotationAngle += 90;
                     updateImageRotation();
                 }
     
                 // Function to rotate the image counter-clockwise
                 function rotateImageCounterClockwise() {
-                    rotationAngle = (rotationAngle - 90) % 360;
+                    rotationAngle -= 90;
                     updateImageRotation();
                 }
     
