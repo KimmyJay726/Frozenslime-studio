@@ -408,7 +408,9 @@
                     hideModal();
                 }
             });
-
+            
+            // Force a resize event after everything has loaded to ensure proper sizing
+            window.dispatchEvent(new Event('resize'));
         };
     </script>
 
