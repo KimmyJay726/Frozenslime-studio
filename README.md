@@ -1,2 +1,2 @@
 # Frozenslime-studio
-A Website to host all of Olivia's amazing creations :)
+A Website to host amazing creations made by a super duper creative person :)
