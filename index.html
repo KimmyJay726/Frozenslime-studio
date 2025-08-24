@@ -146,8 +146,8 @@
     </div>
 
     <script>
-        // Use a single DOMContentLoaded listener for all scripts
-        document.addEventListener('DOMContentLoaded', () => {
+        // Use a single window.onload listener to ensure all resources (including CSS) are loaded
+        window.onload = function() {
 
             // --- Light/Dark Mode Toggle Logic ---
             const themeToggleBtn = document.getElementById('theme-toggle');
@@ -409,7 +409,7 @@
                 }
             });
 
-        });
+        };
     </script>
 
 </body>
