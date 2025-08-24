@@ -381,7 +381,7 @@
                 const sunIcon = document.getElementById('sun-icon');
                 const moonIcon = document.getElementById('moon-icon');
                 const body = document.body;
-    
+        
                 // Check for saved theme preference in local storage on page load
                 const currentTheme = localStorage.getItem('theme');
                 if (currentTheme === 'dark') {
@@ -397,7 +397,7 @@
                 
                 // --- FIX: Explicitly dispatch a resize event to ensure correct initial rendering ---
                 window.dispatchEvent(new Event('resize'));
-    
+        
                 // Add click listener to the theme toggle button
                 themeToggleBtn.addEventListener('click', () => {
                     if (body.classList.contains('dark')) {
@@ -418,7 +418,7 @@
                         clearTimeouts();
                     }
                 });
-    
+        
                 // Gallery logic for single image display
                 const images = [
                     'CE8BA147-37C6-4738-94A9-E833EA7A1699.JPG',
@@ -508,45 +508,46 @@
                 
                 let currentIndex = 0; // State variable to track the current image index
                 let rotationAngle = 0; // State variable for image rotation
-    
+        
                 const singleImage = document.getElementById('single-image');
                 const prevBtn = document.getElementById('prev-btn');
                 const nextBtn = document.getElementById('next-btn');
                 const imageCounter = document.getElementById('image-counter');
                 const rotateCwBtn = document.getElementById('rotate-cw-btn');
                 const rotateCcwBtn = document.getElementById('rotate-ccw-btn');
-    
+        
                 const modal = document.getElementById('image-modal');
                 const modalImage = document.getElementById('modal-image');
                 const closeModal = document.querySelector('.close');
-    
+        
                 // Function to render the current image and update the counter
                 function renderImage() {
+                    // NOTE: The image paths are relative. They will only work if you have a local 'images' folder.
                     singleImage.src = `./images/${images[currentIndex]}`;
                     imageCounter.textContent = `${currentIndex + 1} of ${images.length}`;
                     // Update the tooltip using the custom tooltips array
                     singleImage.title = tooltips[currentIndex];
                     updateImageRotation();
                 }
-    
+        
                 // Function to show the previous image
                 function showPrevImage() {
                     currentIndex = (currentIndex - 1 + images.length) % images.length;
                     renderImage();
                 }
-    
+        
                 // Function to show the next image
                 function showNextImage() {
                     currentIndex = (currentIndex + 1) % images.length;
                     renderImage();
                 }
-    
+        
                 // Function to open the modal
                 function openModal(src) {
                     modal.style.display = 'flex';
                     modalImage.src = src;
                 }
-    
+        
                 // Function to close the modal
                 function hideModal() {
                     modal.style.display = 'none';
@@ -562,13 +563,13 @@
                     rotationAngle += 90;
                     updateImageRotation();
                 }
-    
+        
                 // Function to rotate the image counter-clockwise
                 function rotateImageCounterClockwise() {
                     rotationAngle -= 90;
                     updateImageRotation();
                 }
-    
+        
                 // Event listeners for navigation buttons
                 prevBtn.addEventListener('click', showPrevImage);
                 nextBtn.addEventListener('click', showNextImage);
@@ -576,22 +577,22 @@
                 // Event listeners for rotation buttons
                 rotateCwBtn.addEventListener('click', rotateImageClockwise);
                 rotateCcwBtn.addEventListener('click', rotateImageCounterClockwise);
-    
+        
                 // Add click event listener to the single image to open the modal
                 singleImage.addEventListener('click', () => {
                     openModal(singleImage.src);
                 });
-    
+        
                 // Close the modal when the close button is clicked
                 closeModal.addEventListener('click', hideModal);
-    
+        
                 // Close the modal when clicking outside the image
                 window.addEventListener('click', (event) => {
                     if (event.target === modal) {
                         hideModal();
                     }
                 });
-    
+        
                 // Event listener for keyboard navigation
                 window.addEventListener('keydown', (event) => {
                     // If the modal is open, we don't want the keyboard navigation to work on the gallery
@@ -602,7 +603,7 @@
                         }
                         return;
                     }
-    
+        
                     if (event.key === 'ArrowLeft') {
                         showPrevImage();
                     } else if (event.key === 'ArrowRight') {
@@ -613,7 +614,7 @@
                         rotateImageCounterClockwise();
                     }
                 });
-    
+        
                 // Initial render
                 renderImage();
             }, 100); // Small delay to allow the page to fully render
