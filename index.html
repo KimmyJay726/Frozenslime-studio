@@ -126,16 +126,20 @@
             <!-- Site Title -->
             <h1 class="text-2xl font-bold text-gray-900 dark:text-white transition-colors duration-300">Frozenslime Studio</h1>
         </div>
-        <!-- Light/Dark Mode Toggle Button -->
-        <button id="theme-toggle" class="p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-300 focus:outline-none">
-            <!-- Sun icon for light mode, Moon icon for dark mode -->
-            <svg id="sun-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
-            </svg>
-            <svg id="moon-icon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
-            </svg>
-        </button>
+        <!-- Container for the last updated text and light/dark mode toggle button -->
+        <div class="flex items-center space-x-4">
+            <span id="last-updated" class="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300"></span>
+            <!-- Light/Dark Mode Toggle Button -->
+            <button id="theme-toggle" class="p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-300 focus:outline-none">
+                <!-- Sun icon for light mode, Moon icon for dark mode -->
+                <svg id="sun-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                </svg>
+                <svg id="moon-icon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                </svg>
+            </button>
+        </div>
     </header>
 
     <!-- Container for the animated fish tank -->
@@ -360,202 +364,212 @@
 
         // Use a single window.onload listener to ensure all resources (including CSS) are loaded
         window.onload = function() {
-
-            // --- Light/Dark Mode Toggle Logic ---
-            const themeToggleBtn = document.getElementById('theme-toggle');
-            const sunIcon = document.getElementById('sun-icon');
-            const moonIcon = document.getElementById('moon-icon');
-            const body = document.body;
-
-            // Check for saved theme preference in local storage on page load
-            const currentTheme = localStorage.getItem('theme');
-            if (currentTheme === 'dark') {
-                body.classList.add('dark');
-                sunIcon.classList.add('hidden');
-                moonIcon.classList.remove('hidden');
-                // If in dark mode on load, clear the fish animation
-                clearTimeouts();
-            } else {
-                // If in light mode, initialize the fish animation
-                initializeTank();
-            }
-            
-            // --- FIX: Explicitly dispatch a resize event to ensure correct initial rendering ---
-            window.dispatchEvent(new Event('resize'));
-
-            // Add click listener to the theme toggle button
-            themeToggleBtn.addEventListener('click', () => {
-                if (body.classList.contains('dark')) {
-                    // Switch to light mode
-                    body.classList.remove('dark');
-                    sunIcon.classList.remove('hidden');
-                    moonIcon.classList.add('hidden');
-                    localStorage.setItem('theme', 'light');
-                    // Start the fish animation
-                    initializeTank();
-                } else {
-                    // Switch to dark mode
+            // Add a slight delay to ensure the DOM has fully rendered and dimensions are available
+            setTimeout(() => {
+                // --- Light/Dark Mode Toggle Logic ---
+                const themeToggleBtn = document.getElementById('theme-toggle');
+                const sunIcon = document.getElementById('sun-icon');
+                const moonIcon = document.getElementById('moon-icon');
+                const body = document.body;
+    
+                // Check for saved theme preference in local storage on page load
+                const currentTheme = localStorage.getItem('theme');
+                if (currentTheme === 'dark') {
                     body.classList.add('dark');
                     sunIcon.classList.add('hidden');
                     moonIcon.classList.remove('hidden');
-                    localStorage.setItem('theme', 'dark');
-                    // Stop the fish animation
+                    // If in dark mode on load, clear the fish animation
                     clearTimeouts();
+                } else {
+                    // If in light mode, initialize the fish animation
+                    initializeTank();
                 }
-            });
-
-            // Gallery logic for single image display
-            const images = [
-                '0C0FC1B5-DAE5-4ADA-ABB9-86718A8DB63E.JPG',
-                '0D661B86-E9CF-431A-8A47-1E22FBC7D6D6.JPG',
-                '05BE4AFF-45EC-4392-AF2B-0D41974C3D05.JPG',
-                '6F8A9068-C23B-4020-B9C9-B8C8A6B570A4.JPG',
-                '7DE70559-617E-4116-A577-0F0EBEA14DC9.JPG',
-                '8B987D5C-6F7E-4B02-94EA-0EC7E99451A0.JPG',
-                '9B48B8C1-B5F1-46BA-8160-6241932F3692.JPG',
-                '15D47E03-2B93-4892-B47C-BFC38EF19859.JPG',
-                '46B99BCA-C195-461D-98CC-9B8C3B28A66C.JPG',
-                '54A05201-C062-4A49-B8DE-E197D083C509.jpg',
-                '6136732D-3A39-41AF-9045-583C9B64994D.JPG',
-                '20240828_105217.jpg',
-                '20240828_105247.jpg',
-                '20240828_105536.jpg',
-                '53934BAE-45B4-4809-8DF1-EE01A73D097A.JPG',
-                '655466ED-7C19-4A4F-A1D1-673679E3776B.JPG',
-                '20240828_105827.jpg',
-                '20240828_105703.jpg',
-                '20240828_105715.jpg',
-                '20240828_105800.jpg',
-                '20240828_105949.jpg',
-                '20240828_110017.jpg',
-                '20240828_110256.jpg',
-                '20240828_110339.jpg',
-                'A0E5043D-FDB2-4FA5-A636-48E253F74F3C.JPG',
-                'BA9E2783-1805-4CBF-9680-53FCA209D55C.JPG',
-                'BED24477-86C1-4482-8A95-A6B5FFB92ADE.jpg',
-                'C4CDE0CF-F3D7-4EA7-92B5-F21EFF01C41E.JPG',
-                'DA1099D5-9969-4D6F-8509-ED76608EB310.JPG',
-                'D9A5AA3B-D70D-4480-95CA-780E79688009.JPG',
-                'E84CC888-4D1D-4D16-AF56-5666C6339ED2.JPG',
-                'EC293388-1DC2-4546-8EDC-D29B2DC920F9.JPG',
-                'F3A8ED64-EFFC-42FC-A847-E082B2C6C213.JPG',
-                'FF66D793-6F9D-4BC8-815B-93598BC7F41F.JPG',
-                'FFEE7BCA-00AA-4C52-9F40-30A57DFADEAA.JPG',
-                'E6CBB324-B23F-4280-A0B8-587D64CA7360.JPG',
-                'F3FADACA-BC2B-400D-81A7-3661EF9F9468.JPG',
-                'FBE45984-0311-4808-B719-54E9E65D3984.JPG'
-            ];
-            
-            let currentIndex = 0; // State variable to track the current image index
-            let rotationAngle = 0; // State variable for image rotation
-
-            const singleImage = document.getElementById('single-image');
-            const prevBtn = document.getElementById('prev-btn');
-            const nextBtn = document.getElementById('next-btn');
-            const imageCounter = document.getElementById('image-counter');
-            const rotateCwBtn = document.getElementById('rotate-cw-btn');
-            const rotateCcwBtn = document.getElementById('rotate-ccw-btn');
-
-            const modal = document.getElementById('image-modal');
-            const modalImage = document.getElementById('modal-image');
-            const closeModal = document.querySelector('.close');
-
-            // Function to render the current image and update the counter
-            function renderImage() {
-                singleImage.src = `./images/${images[currentIndex]}`;
-                imageCounter.textContent = `${currentIndex + 1} of ${images.length}`;
-                // Reset rotation when changing images
-                rotationAngle = 0;
-                updateImageRotation();
-            }
-
-            // Function to show the previous image
-            function showPrevImage() {
-                currentIndex = (currentIndex - 1 + images.length) % images.length;
-                renderImage();
-            }
-
-            // Function to show the next image
-            function showNextImage() {
-                currentIndex = (currentIndex + 1) % images.length;
-                renderImage();
-            }
-
-            // Function to open the modal
-            function openModal(src) {
-                modal.style.display = 'flex';
-                modalImage.src = src;
-            }
-
-            // Function to close the modal
-            function hideModal() {
-                modal.style.display = 'none';
-            }
-            
-            // Function to update the image rotation based on the current angle
-            function updateImageRotation() {
-                document.documentElement.style.setProperty('--rotation-angle', `${rotationAngle}deg`);
-            }
-            
-            // Function to rotate the image clockwise
-            function rotateImageClockwise() {
-                rotationAngle = (rotationAngle + 90) % 360;
-                updateImageRotation();
-            }
-
-            // Function to rotate the image counter-clockwise
-            function rotateImageCounterClockwise() {
-                rotationAngle = (rotationAngle - 90) % 360;
-                updateImageRotation();
-            }
-
-            // Event listeners for navigation buttons
-            prevBtn.addEventListener('click', showPrevImage);
-            nextBtn.addEventListener('click', showNextImage);
-            
-            // Event listeners for rotation buttons
-            rotateCwBtn.addEventListener('click', rotateImageClockwise);
-            rotateCcwBtn.addEventListener('click', rotateImageCounterClockwise);
-
-            // Add click event listener to the single image to open the modal
-            singleImage.addEventListener('click', () => {
-                openModal(singleImage.src);
-            });
-
-            // Close the modal when the close button is clicked
-            closeModal.addEventListener('click', hideModal);
-
-            // Close the modal when clicking outside the image
-            window.addEventListener('click', (event) => {
-                if (event.target === modal) {
-                    hideModal();
+                
+                // --- FIX: Explicitly dispatch a resize event to ensure correct initial rendering ---
+                window.dispatchEvent(new Event('resize'));
+    
+                // Add click listener to the theme toggle button
+                themeToggleBtn.addEventListener('click', () => {
+                    if (body.classList.contains('dark')) {
+                        // Switch to light mode
+                        body.classList.remove('dark');
+                        sunIcon.classList.remove('hidden');
+                        moonIcon.classList.add('hidden');
+                        localStorage.setItem('theme', 'light');
+                        // Start the fish animation
+                        initializeTank();
+                    } else {
+                        // Switch to dark mode
+                        body.classList.add('dark');
+                        sunIcon.classList.add('hidden');
+                        moonIcon.classList.remove('hidden');
+                        localStorage.setItem('theme', 'dark');
+                        // Stop the fish animation
+                        clearTimeouts();
+                    }
+                });
+    
+                // Gallery logic for single image display
+                const images = [
+                    '0C0FC1B5-DAE5-4ADA-ABB9-86718A8DB63E.JPG',
+                    '0D661B86-E9CF-431A-8A47-1E22FBC7D6D6.JPG',
+                    '05BE4AFF-45EC-4392-AF2B-0D41974C3D05.JPG',
+                    '6F8A9068-C23B-4020-B9C9-B8C8A6B570A4.JPG',
+                    '7DE70559-617E-4116-A577-0F0EBEA14DC9.JPG',
+                    '8B987D5C-6F7E-4B02-94EA-0EC7E99451A0.JPG',
+                    '9B48B8C1-B5F1-46BA-8160-6241932F3692.JPG',
+                    '15D47E03-2B93-4892-B47C-BFC38EF19859.JPG',
+                    '46B99BCA-C195-461D-98CC-9B8C3B28A66C.JPG',
+                    '54A05201-C062-4A49-B8DE-E197D083C509.jpg',
+                    '6136732D-3A39-41AF-9045-583C9B64994D.JPG',
+                    '20240828_105217.jpg',
+                    '20240828_105247.jpg',
+                    '20240828_105536.jpg',
+                    '53934BAE-45B4-4809-8DF1-EE01A73D097A.JPG',
+                    '655466ED-7C19-4A4F-A1D1-673679E3776B.JPG',
+                    '20240828_105827.jpg',
+                    '20240828_105703.jpg',
+                    '20240828_105715.jpg',
+                    '20240828_105800.jpg',
+                    '20240828_105949.jpg',
+                    '20240828_110017.jpg',
+                    '20240828_110256.jpg',
+                    '20240828_110339.jpg',
+                    'A0E5043D-FDB2-4FA5-A636-48E253F74F3C.JPG',
+                    'BA9E2783-1805-4CBF-9680-53FCA209D55C.JPG',
+                    'BED24477-86C1-4482-8A95-A6B5FFB92ADE.jpg',
+                    'C4CDE0CF-F3D7-4EA7-92B5-F21EFF01C41E.JPG',
+                    'DA1099D5-9969-4D6F-8509-ED76608EB310.JPG',
+                    'D9A5AA3B-D70D-4480-95CA-780E79688009.JPG',
+                    'E84CC888-4D1D-4D16-AF56-5666C6339ED2.JPG',
+                    'EC293388-1DC2-4546-8EDC-D29B2DC920F9.JPG',
+                    'F3A8ED64-EFFC-42FC-A847-E082B2C6C213.JPG',
+                    'FF66D793-6F9D-4BC8-815B-93598BC7F41F.JPG',
+                    'FFEE7BCA-00AA-4C52-9F40-30A57DFADEAA.JPG',
+                    'E6CBB324-B23F-4280-A0B8-587D64CA7360.JPG',
+                    'F3FADACA-BC2B-400D-81A7-3661EF9F9468.JPG',
+                    'FBE45984-0311-4808-B719-54E9E65D3984.JPG'
+                ];
+                
+                let currentIndex = 0; // State variable to track the current image index
+                let rotationAngle = 0; // State variable for image rotation
+    
+                const singleImage = document.getElementById('single-image');
+                const prevBtn = document.getElementById('prev-btn');
+                const nextBtn = document.getElementById('next-btn');
+                const imageCounter = document.getElementById('image-counter');
+                const rotateCwBtn = document.getElementById('rotate-cw-btn');
+                const rotateCcwBtn = document.getElementById('rotate-ccw-btn');
+                const lastUpdatedSpan = document.getElementById('last-updated');
+    
+                const modal = document.getElementById('image-modal');
+                const modalImage = document.getElementById('modal-image');
+                const closeModal = document.querySelector('.close');
+    
+                // Function to render the current image and update the counter
+                function renderImage() {
+                    singleImage.src = `./images/${images[currentIndex]}`;
+                    imageCounter.textContent = `${currentIndex + 1} of ${images.length}`;
+                    updateImageRotation();
                 }
-            });
-
-            // Event listener for keyboard navigation
-            window.addEventListener('keydown', (event) => {
-                // If the modal is open, we don't want the keyboard navigation to work on the gallery
-                if (modal.style.display === 'flex') {
-                    // Close the modal with Escape key
-                    if (event.key === 'Escape') {
+    
+                // Function to show the previous image
+                function showPrevImage() {
+                    currentIndex = (currentIndex - 1 + images.length) % images.length;
+                    renderImage();
+                }
+    
+                // Function to show the next image
+                function showNextImage() {
+                    currentIndex = (currentIndex + 1) % images.length;
+                    renderImage();
+                }
+    
+                // Function to open the modal
+                function openModal(src) {
+                    modal.style.display = 'flex';
+                    modalImage.src = src;
+                }
+    
+                // Function to close the modal
+                function hideModal() {
+                    modal.style.display = 'none';
+                }
+                
+                // Function to update the image rotation based on the current angle
+                function updateImageRotation() {
+                    document.documentElement.style.setProperty('--rotation-angle', `${rotationAngle}deg`);
+                }
+                
+                // Function to rotate the image clockwise
+                function rotateImageClockwise() {
+                    rotationAngle = (rotationAngle + 90) % 360;
+                    updateImageRotation();
+                }
+    
+                // Function to rotate the image counter-clockwise
+                function rotateImageCounterClockwise() {
+                    rotationAngle = (rotationAngle - 90) % 360;
+                    updateImageRotation();
+                }
+    
+                // Function to display the last updated date
+                function updateLastUpdated() {
+                    const now = new Date();
+                    const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+                    const formattedDate = now.toLocaleDateString('en-US', options);
+                    lastUpdatedSpan.textContent = `Last updated: ${formattedDate}`;
+                }
+    
+                // Event listeners for navigation buttons
+                prevBtn.addEventListener('click', showPrevImage);
+                nextBtn.addEventListener('click', showNextImage);
+                
+                // Event listeners for rotation buttons
+                rotateCwBtn.addEventListener('click', rotateImageClockwise);
+                rotateCcwBtn.addEventListener('click', rotateImageCounterClockwise);
+    
+                // Add click event listener to the single image to open the modal
+                singleImage.addEventListener('click', () => {
+                    openModal(singleImage.src);
+                });
+    
+                // Close the modal when the close button is clicked
+                closeModal.addEventListener('click', hideModal);
+    
+                // Close the modal when clicking outside the image
+                window.addEventListener('click', (event) => {
+                    if (event.target === modal) {
                         hideModal();
                     }
-                    return;
-                }
-
-                if (event.key === 'ArrowLeft') {
-                    showPrevImage();
-                } else if (event.key === 'ArrowRight') {
-                    showNextImage();
-                } else if (event.key === 'ArrowUp') {
-                    rotateImageClockwise();
-                } else if (event.key === 'ArrowDown') {
-                    rotateImageCounterClockwise();
-                }
-            });
-
-            // Initial render
-            renderImage();
+                });
+    
+                // Event listener for keyboard navigation
+                window.addEventListener('keydown', (event) => {
+                    // If the modal is open, we don't want the keyboard navigation to work on the gallery
+                    if (modal.style.display === 'flex') {
+                        // Close the modal with Escape key
+                        if (event.key === 'Escape') {
+                            hideModal();
+                        }
+                        return;
+                    }
+    
+                    if (event.key === 'ArrowLeft') {
+                        showPrevImage();
+                    } else if (event.key === 'ArrowRight') {
+                        showNextImage();
+                    } else if (event.key === 'ArrowUp') {
+                        rotateImageClockwise();
+                    } else if (event.key === 'ArrowDown') {
+                        rotateImageCounterClockwise();
+                    }
+                });
+    
+                // Initial render
+                renderImage();
+                updateLastUpdated();
+            }, 100); // Small delay to allow the page to fully render
         };
     </script>
 
