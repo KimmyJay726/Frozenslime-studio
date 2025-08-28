@@ -27,6 +27,8 @@
             position: relative; /* Needed for z-index to work */
             transition: background-color 0.3s ease-in-out;
             -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
+            /* Prevent double-tap zoom */
+            touch-action: manipulation;
         }
 
         body.dark {
@@ -91,6 +93,8 @@
             /* Apply the rotation variable here */
             transform: rotate(var(--rotation-angle));
             object-fit: contain; /* Ensure image maintains aspect ratio */
+            /* Prevent double-tap zoom on image */
+            touch-action: manipulation;
         }
 
         /* Styles for the modal */
@@ -117,6 +121,8 @@
             animation-name: zoom;
             animation-duration: 0.6s;
             object-fit: contain; /* Ensure image maintains aspect ratio */
+            /* Allow zooming in modal but prevent double-tap */
+            touch-action: pan-y pinch-zoom;
         }
 
         @keyframes zoom {
@@ -158,6 +164,8 @@
             padding: 0.75rem;
             min-width: 80%; /* Ensure it doesn't get too narrow */
             max-width: 95%; /* Ensure it doesn't get too wide */
+            /* Prevent double-tap zoom on buttons */
+            touch-action: manipulation;
         }
 
         body.dark .fixed-bottom-buttons {
@@ -184,6 +192,8 @@
             text-align: center;
             background: rgba(0, 0, 0, 0.3); /* Semi-transparent background for better readability */
             backdrop-filter: blur(5px); /* Blur effect for modern browsers */
+            /* Prevent double-tap zoom on header */
+            touch-action: manipulation;
         }
 
         @media (max-width: 640px) {
@@ -207,6 +217,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            /* Prevent double-tap zoom on buttons */
+            touch-action: manipulation;
         }
 
         @media (max-width: 400px) {
@@ -769,6 +781,16 @@
                         rotateImageCounterClockwise();
                     }
                 });
+
+                // Double-tap zoom prevention
+                let lastTouchEnd = 0;
+                document.addEventListener('touchend', function (event) {
+                    const now = (new Date()).getTime();
+                    if (now - lastTouchEnd <= 300) {
+                        event.preventDefault();
+                    }
+                    lastTouchEnd = now;
+                }, false);
         
                 // Initial render
                 renderImage();
