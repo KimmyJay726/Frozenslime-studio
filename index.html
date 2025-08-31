@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Frozenslime Studio</title>
     <!-- Use Tailwind CSS for a clean, responsive design -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -27,8 +27,6 @@
             position: relative; /* Needed for z-index to work */
             transition: background-color 0.3s ease-in-out;
             -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
-            /* Prevent double-tap zoom */
-            touch-action: manipulation;
         }
 
         body.dark {
@@ -69,20 +67,8 @@
             box-sizing: border-box;
         }
         
-        @media (max-width: 768px) {
-            .single-image-container {
-                min-height: 300px;
-                padding: 0.5rem;
-            }
-        }
+        /* Mobile-specific styles will be applied via JavaScript */
         
-        @media (max-width: 500px) {
-            .single-image-container {
-                min-height: 250px;
-                padding: 0.25rem;
-            }
-        }
-
         .single-image {
             max-width: 95%;
             max-height: 70vh; /* Limit height to prevent image from being too large */
@@ -93,8 +79,6 @@
             /* Apply the rotation variable here */
             transform: rotate(var(--rotation-angle));
             object-fit: contain; /* Ensure image maintains aspect ratio */
-            /* Prevent double-tap zoom on image */
-            touch-action: manipulation;
         }
 
         /* Styles for the modal */
@@ -121,8 +105,6 @@
             animation-name: zoom;
             animation-duration: 0.6s;
             object-fit: contain; /* Ensure image maintains aspect ratio */
-            /* Allow zooming in modal but prevent double-tap */
-            touch-action: pan-y pinch-zoom;
         }
 
         @keyframes zoom {
@@ -164,101 +146,51 @@
             padding: 0.75rem;
             min-width: 80%; /* Ensure it doesn't get too narrow */
             max-width: 95%; /* Ensure it doesn't get too wide */
-            /* Prevent double-tap zoom on buttons */
-            touch-action: manipulation;
         }
 
         body.dark .fixed-bottom-buttons {
             background-color: rgba(31, 41, 55, 0.85); /* Match dark mode */
         }
 
-        /* Added responsive styling for the buttons container */
-        @media (max-width: 640px) {
-            .fixed-bottom-buttons {
-                bottom: 1rem;
-                flex-direction: row; /* Keep buttons in a row on mobile */
-                padding: 0.5rem;
-                width: 95%;
-            }
-            .fixed-bottom-buttons > * {
-                margin: 0.25rem;
-            }
-        }
-
-        /* Header adjustments for mobile */
-        header {
-            padding: 1rem !important;
-            flex-direction: column !important;
-            text-align: center;
-            background: rgba(0, 0, 0, 0.3); /* Semi-transparent background for better readability */
-            backdrop-filter: blur(5px); /* Blur effect for modern browsers */
-            /* Prevent double-tap zoom on header */
-            touch-action: manipulation;
-        }
-
-        @media (max-width: 640px) {
-            header {
-                padding: 0.5rem !important;
-            }
-            
-            #last-updated {
-                font-size: 0.7rem !important;
-            }
-            
-            h1 {
-                font-size: 1.25rem !important;
-            }
-        }
-
-        /* Button sizing for mobile */
+        /* Default button styling */
         .nav-button {
             width: 44px; /* Minimum touch target size */
             height: 44px;
             display: flex;
             justify-content: center;
             align-items: center;
-            /* Prevent double-tap zoom on buttons */
-            touch-action: manipulation;
         }
 
-        @media (max-width: 400px) {
-            .nav-button {
-                width: 40px;
-                height: 40px;
-            }
-            
-            .nav-button svg {
-                width: 20px;
-                height: 20px;
-            }
-        }
-
+        /* Mobile-specific styles will be applied via JavaScript */
+        
+        /* Header adjustments for mobile will be applied via JavaScript */
+        
         /* Prevent horizontal scrolling */
         html, body {
             overflow-x: hidden;
         }
     </style>
 </head>
-<body class="p-4 md:p-8">
+<body class="p-8">
 
     <!-- Transparent Top Bar with Logo, Title, and Light/Dark Mode Toggle -->
-    <header class="fixed top-0 left-0 right-0 z-50 flex justify-between items-center bg-transparent">
+    <header class="fixed top-0 left-0 right-0 p-4 z-50 flex justify-between items-center bg-transparent">
         <div class="flex items-center space-x-2">
             <!-- Site Logo (using an emoji as a simple placeholder) -->
-            <span class="text-2xl md:text-3xl">🎨</span>
+            <span class="text-3xl">🎨</span>
             <!-- Site Title -->
-            <h1 class="text-xl md:text-2xl font-bold text-white transition-colors duration-300">Frozenslime Studio</h1>
+            <h1 class="text-2xl font-bold text-white transition-colors duration-300">Frozenslime Studio</h1>
         </div>
         <!-- Container for the last updated text and light/dark mode toggle button -->
-        <div class="flex items-center space-x-2 md:space-x-4">
-            <span id="last-updated" class="text-xs md:text-sm text-gray-200 dark:text-gray-300 transition-colors duration-300">Last Updated: August 24, 2025</span>
+        <div class="flex items-center space-x-4">
+            <span id="last-updated" class="text-sm text-gray-200 dark:text-gray-300 transition-colors duration-300">Last Updated: August 24, 2025</span>
             <!-- Light/Dark Mode Toggle Button -->
             <button id="theme-toggle" class="p-2 rounded-full text-gray-200 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-300 focus:outline-none nav-button">
                 <!-- Sun icon for light mode, Moon icon for dark mode -->
-                <svg id="sun-icon" class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <svg id="sun-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
                 </svg>
-                <svg id="moon-icon" class="w-5 h-5 md:w-6 md:h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <svg id="moon-icon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
                 </svg>
             </button>
@@ -275,30 +207,30 @@
     </div>
         
     <!-- Navigation and Counter (moved to a fixed bottom position) -->
-    <div class="fixed-bottom-buttons flex justify-center items-center space-x-2 md:space-x-4 shadow-2xl transition-colors duration-300">
+    <div class="fixed-bottom-buttons flex justify-center items-center space-x-4 shadow-2xl transition-colors duration-300">
         <!-- Rotation button - Counter-clockwise -->
         <button id="rotate-ccw-btn" class="p-2 bg-gray-200 dark:bg-gray-700 rounded-full shadow hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors nav-button" title="Rotate Counter-Clockwise (ArrowUp)">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 md:h-6 md:w-6 text-gray-700 dark:text-gray-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700 dark:text-gray-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M20.3 4.7l-1.3 1.3M17 12a5 5 0 1 1-10 0 5 5 0 0 1 10 0zM12 2a10 10 0 0 1 8 5.6M12 22a10 10 0 0 0 8-5.6"/>
                 <path d="M12 22v-4M22 12h-4"/>
             </svg>
         </button>
 
         <button id="prev-btn" class="p-2 bg-gray-200 dark:bg-gray-700 rounded-full shadow hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors nav-button" title="Previous Image (ArrowLeft)">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 md:h-6 md:w-6 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
             </svg>
         </button>
-        <span id="image-counter" class="text-base md:text-lg font-semibold text-gray-800 dark:text-gray-200 mx-1 md:mx-2"></span>
+        <span id="image-counter" class="text-lg font-semibold text-gray-800 dark:text-gray-200 mx-2"></span>
         <button id="next-btn" class="p-2 bg-gray-200 dark:bg-gray-700 rounded-full shadow hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors nav-button" title="Next Image (ArrowRight)">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 md:h-6 md:w-6 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
             </svg>
         </button>
         
         <!-- Rotation button - Clockwise -->
         <button id="rotate-cw-btn" class="p-2 bg-gray-200 dark:bg-gray-700 rounded-full shadow hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors nav-button" title="Rotate Clockwise (ArrowDown)">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 md:h-6 md:w-6 text-gray-700 dark:text-gray-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700 dark:text-gray-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M3.7 4.7l1.3 1.3M7 12a5 5 0 1 0 10 0 5 5 0 0 0-10 0zM12 2a10 10 0 0 0-8 5.6M12 22a10 10 0 0 1-8-5.6"/>
                 <path d="M12 22v-4M2 12h4"/>
             </svg>
@@ -312,6 +244,66 @@
     </div>
 
     <script>
+        // Device detection function
+        function isMobileDevice() {
+            return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
+        }
+        
+        // Apply mobile-specific styles if on a mobile device
+        function applyMobileStyles() {
+            if (!isMobileDevice()) return;
+            
+            console.log("Applying mobile-specific styles");
+            
+            // Add mobile class to body for CSS targeting
+            document.body.classList.add('mobile-device');
+            
+            // Adjust body padding for mobile
+            document.body.classList.remove('p-8');
+            document.body.classList.add('p-4');
+            
+            // Adjust header for mobile
+            const header = document.querySelector('header');
+            header.classList.add('flex-col', 'text-center', 'bg-opacity-70');
+            header.classList.remove('justify-between');
+            header.innerHTML = `
+                <div class="flex items-center space-x-2 mb-2">
+                    <span class="text-2xl">🎨</span>
+                    <h1 class="text-xl font-bold text-white">Frozenslime Studio</h1>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <span id="last-updated" class="text-xs text-gray-200">Last Updated: August 24, 2025</span>
+                    ${header.querySelector('#theme-toggle').outerHTML}
+                </div>
+            `;
+            
+            // Adjust image container for mobile
+            const imageContainer = document.getElementById('single-image-container');
+            imageContainer.classList.add('min-h-300', 'p-2');
+            
+            // Adjust bottom buttons for mobile
+            const bottomButtons = document.querySelector('.fixed-bottom-buttons');
+            bottomButtons.classList.add('bottom-1', 'p-2', 'w-95');
+            bottomButtons.classList.remove('space-x-4');
+            bottomButtons.classList.add('space-x-2');
+            
+            // Adjust button sizes for mobile
+            const navButtons = document.querySelectorAll('.nav-button');
+            navButtons.forEach(button => {
+                button.classList.add('w-10', 'h-10');
+                const svg = button.querySelector('svg');
+                if (svg) {
+                    svg.classList.remove('w-6', 'h-6');
+                    svg.classList.add('w-5', 'h-5');
+                }
+            });
+            
+            // Adjust counter text size
+            const counter = document.getElementById('image-counter');
+            counter.classList.remove('text-lg');
+            counter.classList.add('text-base');
+        }
+
         // IIFE for the CodePen fish animation logic
         (function () {
             var myoptions
@@ -344,12 +336,14 @@
             /* Fish functions */
             window.initializeTank = function() {
                 WINDOW_MIN = Math.min(tank.clientHeight, tank.clientWidth)
-                generateFishTank()
-                if (WINDOW_MIN <= MIN_THRESHOLD) {
-                    // Reduce fish count on mobile for better performance
+                
+                // Adjust fish settings for mobile
+                if (isMobileDevice()) {
                     myoptions.NumFishGroups = "12";
                     myoptions.MaxPerSchool = "4";
                 }
+                
+                generateFishTank()
             }
             
             function generateFishTank() {
@@ -378,9 +372,9 @@
                 root.style.left = `${getRandomFloat(0,100)}%`
                 root.style.top = `${getRandomFloat(0,100)}%`
             
-                //fish sizes
-                let maxFishSize = WINDOW_MIN < MIN_THRESHOLD ? 50 : 80
-                let minFishSize = WINDOW_MIN < MIN_THRESHOLD ? 5 : 10
+                //fish sizes - adjust for mobile
+                let maxFishSize = isMobileDevice() ? 50 : 80;
+                let minFishSize = isMobileDevice() ? 5 : 10;
                 let staticSize = getRandomInt(minFishSize, maxFishSize / 2)
                 let allSameSize = numFish > 1 && Math.random() > .7
             
@@ -421,7 +415,7 @@
                 school.setAttribute("data-x", newX)
             
                 //correct fish direction if necessary and for >1 fish, shift them around a little in the school
-                let maxTranslationDistance = WINDOW_MIN < MIN_THRESHOLD ? 50 : 100;;
+                let maxTranslationDistance = isMobileDevice() ? 50 : 100;
                 [...school.querySelectorAll(".fish")].forEach(fish => {
                     let direction = fish.querySelector(".direction")
                     direction.style.transform = `scaleX(${isRight?-1:1})`
@@ -463,9 +457,8 @@
                 return (Math.random() * (max - min)) + min
             }
             
-            function isMobile() {
-                let mobile = window.matchMedia(`only screen and (max-width: ${MIN_THRESHOLD}px), only screen and (max-height:${MIN_THRESHOLD}px)`).matches;
-                return mobile || navigator.userAgent.indexOf("Firefox") != -1 || navigator.userAgent.indexOf("Silk") != -1;
+            function isSquid(letter) {
+                return /[\u{1f991}\u{1f419}]/u.test(letter)
             }
             
             window.clearTimeouts = function() {
@@ -477,15 +470,14 @@
                 tank.innerHTML = "";
             }
             
-            function isSquid(letter) {
-                return /[\u{1f991}\u{1f419}]/u.test(letter)
-            }
-            
         })("sweaverD.com");
 
 
         // Use a single window.onload listener to ensure all resources (including CSS) are loaded
         window.onload = function() {
+            // Apply mobile styles if needed
+            applyMobileStyles();
+            
             // Add a slight delay to ensure the DOM has fully rendered and dimensions are available
             setTimeout(() => {
                 // --- Light/Dark Mode Toggle Logic ---
@@ -682,15 +674,19 @@
                 function openModal(src) {
                     modal.style.display = 'flex';
                     modalImage.src = src;
-                    // Prevent body from scrolling when modal is open
-                    document.body.style.overflow = 'hidden';
+                    // Prevent body from scrolling when modal is open on mobile
+                    if (isMobileDevice()) {
+                        document.body.style.overflow = 'hidden';
+                    }
                 }
         
                 // Function to close the modal
                 function hideModal() {
                     modal.style.display = 'none';
-                    // Re-enable body scrolling when modal is closed
-                    document.body.style.overflow = '';
+                    // Re-enable body scrolling when modal is closed on mobile
+                    if (isMobileDevice()) {
+                        document.body.style.overflow = '';
+                    }
                 }
                 
                 // Function to update the image rotation based on the current angle
@@ -711,29 +707,31 @@
                 }
 
                 // Add swipe support for mobile devices
-                let touchStartX = 0;
-                let touchEndX = 0;
-                
-                singleImage.addEventListener('touchstart', e => {
-                    touchStartX = e.changedTouches[0].screenX;
-                }, false);
-                
-                singleImage.addEventListener('touchend', e => {
-                    touchEndX = e.changedTouches[0].screenX;
-                    handleSwipe();
-                }, false);
-                
-                function handleSwipe() {
-                    const swipeThreshold = 50; // Minimum swipe distance
+                if (isMobileDevice()) {
+                    let touchStartX = 0;
+                    let touchEndX = 0;
                     
-                    if (touchEndX < touchStartX - swipeThreshold) {
-                        // Swipe left - next image
-                        showNextImage();
-                    }
+                    singleImage.addEventListener('touchstart', e => {
+                        touchStartX = e.changedTouches[0].screenX;
+                    }, false);
                     
-                    if (touchEndX > touchStartX + swipeThreshold) {
-                        // Swipe right - previous image
-                        showPrevImage();
+                    singleImage.addEventListener('touchend', e => {
+                        touchEndX = e.changedTouches[0].screenX;
+                        handleSwipe();
+                    }, false);
+                    
+                    function handleSwipe() {
+                        const swipeThreshold = 50; // Minimum swipe distance
+                        
+                        if (touchEndX < touchStartX - swipeThreshold) {
+                            // Swipe left - next image
+                            showNextImage();
+                        }
+                        
+                        if (touchEndX > touchStartX + swipeThreshold) {
+                            // Swipe right - previous image
+                            showPrevImage();
+                        }
                     }
                 }
         
@@ -781,16 +779,6 @@
                         rotateImageCounterClockwise();
                     }
                 });
-
-                // Double-tap zoom prevention
-                let lastTouchEnd = 0;
-                document.addEventListener('touchend', function (event) {
-                    const now = (new Date()).getTime();
-                    if (now - lastTouchEnd <= 300) {
-                        event.preventDefault();
-                    }
-                    lastTouchEnd = now;
-                }, false);
         
                 // Initial render
                 renderImage();
