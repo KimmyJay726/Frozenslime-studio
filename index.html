@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Frozenslime Studio</title>
     <!-- Use Tailwind CSS for a clean, responsive design -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -10,6 +10,23 @@
         :root {
             --rotation-angle: 0deg;
         }
+        
+        /* Prevent double-tap zoom and scrolling on mobile */
+        html, body {
+            touch-action: manipulation;
+            -ms-touch-action: manipulation;
+            overscroll-behavior: none;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        /* Prevent text selection */
+        body {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
         body {
             /* Use flexbox to center the main content vertically and horizontally */
             display: flex;
@@ -168,6 +185,53 @@
         /* Prevent horizontal scrolling */
         html, body {
             overflow-x: hidden;
+        }
+        
+        /* Mobile-specific styles */
+        @media (max-width: 768px) {
+            .single-image-container {
+                min-height: 300px;
+                padding: 0.5rem;
+            }
+            
+            .fixed-bottom-buttons {
+                bottom: 1rem;
+                padding: 0.5rem;
+                width: 95%;
+            }
+            
+            .fixed-bottom-buttons > * {
+                margin: 0.25rem;
+            }
+            
+            .nav-button {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .nav-button svg {
+                width: 20px;
+                height: 20px;
+            }
+            
+            header {
+                padding: 0.5rem !important;
+                flex-direction: column !important;
+                text-align: center;
+                background: rgba(0, 0, 0, 0.3);
+            }
+            
+            #last-updated {
+                font-size: 0.7rem !important;
+            }
+            
+            h1 {
+                font-size: 1.25rem !important;
+            }
+            
+            #image-counter {
+                font-size: 0.9rem !important;
+            }
         }
     </style>
 </head>
@@ -713,12 +777,16 @@
                     
                     singleImage.addEventListener('touchstart', e => {
                         touchStartX = e.changedTouches[0].screenX;
-                    }, false);
+                        // Prevent default to avoid scrolling
+                        e.preventDefault();
+                    }, {passive: false});
                     
                     singleImage.addEventListener('touchend', e => {
                         touchEndX = e.changedTouches[0].screenX;
                         handleSwipe();
-                    }, false);
+                        // Prevent default to avoid scrolling
+                        e.preventDefault();
+                    }, {passive: false});
                     
                     function handleSwipe() {
                         const swipeThreshold = 50; // Minimum swipe distance
@@ -733,6 +801,18 @@
                             showPrevImage();
                         }
                     }
+                    
+                    // Prevent scrolling on touch events
+                    document.addEventListener('touchmove', function(e) {
+                        if (e.target.closest('.fixed-bottom-buttons') || 
+                            e.target.closest('header') || 
+                            e.target.closest('.modal')) {
+                            // Allow touch movement on buttons, header, and modal
+                            return;
+                        }
+                        // Prevent default for other elements to avoid scrolling
+                        e.preventDefault();
+                    }, {passive: false});
                 }
         
                 // Event listeners for navigation buttons
